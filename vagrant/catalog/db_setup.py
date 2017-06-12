@@ -32,16 +32,7 @@ class Genre(Base):
         return {'name': self.name, 'id': self.id}
 
 
-class Item_Type(Base):
-    __tablename__ = 'itemtype'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship(User)
-
-
-class Book(Base):
+class Item(Base):
     __tablename__ = 'book'
 # Add Column for Date added Timestamp
     id = Column(Integer, primary_key=True)
@@ -55,8 +46,6 @@ class Book(Base):
     user = relationship(User)
     genre_id = Column(Integer, ForeignKey('genre.id'))
     genre = relationship(Genre)
-    item_type_id = Column(Integer, ForeignKey('itemtype.id'))
-    item_type = relationship(Item_Type)
 
     @property
     def serialize(self):
