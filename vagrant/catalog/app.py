@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_setup import Base, Genre, Item, Item_Type
+from db_setup import Base, Genre, Item
 
 
 app = Flask(__name__)
@@ -11,6 +11,12 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+@app.route('/')
+@app.route('/home')
+def show_login():
+    return render_template('layout.html')
 
 
 @app.route('/genre/JSON')
@@ -30,4 +36,4 @@ def new_genre():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(port=5003)
