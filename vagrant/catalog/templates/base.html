@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bookshelf</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/tachyons.min.css')}}">
+</head>
+
+<body>
+  <header class="pa3 ph5-ns">
+    {% block header %}
+    <nav class="dt dt--fixed w-100 border-box pb3-ns bb b--black-80  bw1">
+      <div class="dtc dn-ns w-third"></div>
+      <a class="dtc v-mid mid-gray link dim w-third w-25-ns tc tl-ns mb2 mb0-ns" href="#" title="Home">
+    <img src="{{url_for('static', filename='img/logo.svg')}}" class="dib w3 h2" alt="Site Name">
+  </a>
+      <div class="static-ns absolute left-0 mt5 mt0-ns db dtc-ns v-mid w-100 w-75-ns h-80 tr avenir fw6">
+        <a class="link dim dark-gray tc tr-ns tl-ns f3 f5-ns db dib-ns pv1 mr0 mr4-ns" href="#" title="Home">Home</a>
+        {% block login %}
+        <a class="link dim dark-gray tc tl-ns f3 f5-ns db dib-ns pv1 mr0 mr4-ns" href="#" title="Sign In">Sign Up</a>
+        <a class="f6 link dim br3 ph3 pv1 mb2 dib white bg-dark-gray" href="#0">Sign In</a>
+        {% endblock %}
+      </div>
+    </nav>
+  </header>
+  {% endblock %}
+  {% block content %}{% endblock %}
+  {% block footer %}
+  <footer class="bg-white black pv2-l ph4 bt bw1 avenir fw6">
+    <p class="f6"><span class="dib mr4 mr5-ns">©2017 Amanuel Ghebreweldi</span>
+      <a class="link black hover-grey" href="/terms">Terms</a> /
+      <a class="link black hover-grey" href="/privacy"> Privacy </a> /
+      <a class="link black hover-grey" href="#">hi@yourcompany.com </a>
+    </p>
+  </footer>
+  {% endblock %}
+</body>
+
+</html>
