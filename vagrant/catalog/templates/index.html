@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% if current_user.is_authenticated %}
+{% block login %}
+<a class="link dim dark-gray tc tl-ns f3 f5-ns db dib-ns pv1 mr0 mr4-ns" href="#" title="User">{{current_user.name}}</a>
+<a class="f6 link dim br3 ph3 pv1 mb2 dib white bg-dark-gray" href="{{url_for('logout')}}">Logout</a>
+{% endblock %}
+{% block content %}
+<header class="tc ph4">
+  <h1 class="f3 f2-m f1-l fw2 black-90 mv3">
+   Welcome {{current_user.name}} 
+  </h1>
+</header>
+{% endblock %}
+{% else %}
+{% block header %}
+  {{ super() }}
+{% endblock %}
+{{ self.content() }}
+<header class="tc ph4">
+  <h1 class="f3 f2-m f1-l fw2 black-90 mv3">
+   No access ! Not logged in  
+  </h1>
+</header>
+{% endif %}
+{% block footer %} 
+  {{ super() }} 
+{% endblock %}

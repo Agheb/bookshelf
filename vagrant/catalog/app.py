@@ -1,18 +1,24 @@
 import datetime
-
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-from flask_login import LoginManager
+import json
+import os
+from flask import Flask, render_template, request, \
+    redirect, url_for, jsonify, session
+from flask_login import LoginManager,  login_required, login_user, \
+    logout_user, current_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from config import config, Auth, ProdConfig, DevConfig
+from config import config, Auth
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
+
+"""avoid to run Flask App over https"""
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 """ Flask App Creation """
 
 app = Flask(__name__)
 app.config.from_object(config['dev'])
 # supress warnings caused possibly by Flask-SQLAlchemy Extension
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
@@ -23,11 +29,11 @@ login_manager.session_protection = "strong"
 """ DB Models """
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(250), nullable=False)
-    last_name = db.Column(db.String(250), nullable=False)
+    name = db.Column(db.String(250), nullable=True)
+    avatar = db.Column(db.String(200))
     email = db.Column(db.String(250), nullable=False)
     active = db.Column(db.Boolean, default=False)
     tokens = db.Column(db.Text)
@@ -116,9 +122,67 @@ def new_genre():
         return redirect(url_for('get_genre_json'))
 
 
+@app.route('/index')
+@login_required
+def index():
+    return render_template('index.html')
+
+
 @app.route('/login')
-def show_login():
-    return render_template('login.html')
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    google = get_google_auth()
+    auth_url, state = google.authorization_url(
+        Auth.AUTH_URI, access_type='offline')
+    session['oauth_state'] = state
+    return render_template('login.html', auth_url=auth_url)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('show_landing'))
+
+
+@app.route('/callback')
+def callback():
+    if current_user is not None and current_user.is_authenticated:
+        return redirect(url_for('index'))
+    if 'error' in request.args:
+        if request.args.get('error') == 'access_denied':
+            return 'You denied access.'
+        return 'Error encountered.'
+    if 'code' not in request.args and 'state' not in request.args:
+        return redirect(url_for('login'))
+    else:
+        google = get_google_auth(state=session['oauth_state'])
+        try:
+            token = google.fetch_token(
+                Auth.TOKEN_URI,
+                client_secret=Auth.CLIENT_SECRET,
+                authorization_response=request.url)
+        except HTTPError:
+            return 'HTTPError occurred.'
+        google = get_google_auth(token=token)
+        resp = google.get(Auth.USER_INFO)
+        if resp.status_code == 200:
+            user_data = resp.json()
+            email = user_data['email']
+            user = User.query.filter_by(email=email).first()
+            if user is None:
+                user = User()
+                user.email = email
+            user.name = user_data['name']
+            print(token)
+            user.tokens = json.dumps(token)
+            user.avatar = user_data['picture']
+            db.session.add(user)
+            db.session.commit()
+            login_user(user)
+            return redirect(url_for('index'))
+        return 'Could not fetch your information.'
 
 
 if __name__ == '__main__':

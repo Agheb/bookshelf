@@ -6,28 +6,10 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-<main class="pa5 pb7 black-80 avenir">
-  <form class="measure center">
-    <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
-      <legend class="f4 fw6 ph0 mh0">Sign In</legend>
-      <div class="mt3">
-        <label class="db fw6 lh-copy f6" for="email-address">Email</label>
-        <input class="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="email" name="email-address"  id="email-address">
-      </div>
-      <div class="mv3">
-        <label class="db fw6 lh-copy f6" for="password">Password</label>
-        <input class="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" type="password" name="password"  id="password">
-      </div>
-    </fieldset>
-    <div class="">
-      <input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign in">
-    </div>
-    <div class="lh-copy mt3">
-      <a href="#0" class="f6 link dim black db">Sign up</a>
-      <a href="#0" class="f6 link dim black db">Forgot your password?</a>
-    </div>
-  </form>
-</main>
+ <a class="no-underline near-white bg-animate bg-near-black hover-bg-gray inline-flex items-center ma2 tc br2 pa2" href="{{auth_url}}" title="Google">
+    <svg class="dib h2 w2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"><path d="M8.16 6.857V9.6h4.537c-.183 1.177-1.37 3.45-4.537 3.45-2.73 0-4.96-2.26-4.96-5.05s2.23-5.05 4.96-5.05c1.554 0 2.594.66 3.19 1.233l2.17-2.092C12.126.79 10.32 0 8.16 0c-4.423 0-8 3.577-8 8s3.577 8 8 8c4.617 0 7.68-3.246 7.68-7.817 0-.526-.057-.926-.126-1.326H8.16z"/></svg>
+    <span class="f6 ml3 pr2"> Login with Google</span>
+  </a>
 {% endblock %}
 {% block footer %} 
   {{ super() }} 
