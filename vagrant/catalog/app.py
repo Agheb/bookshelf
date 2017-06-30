@@ -100,6 +100,11 @@ def get_google_auth(state=None, token=None):
     return oauth
 
 
+@app.route('/collection')
+def show_collection():
+    return render_template('collection.html')
+
+
 @app.route('/')
 @app.route('/home')
 def show_landing():
