@@ -2,13 +2,14 @@ import datetime
 import json
 import os
 from flask import Flask, render_template, request, \
-    redirect, url_for, jsonify, session
+    redirect, url_for, jsonify, session, flash
 from flask_login import LoginManager,  login_required, login_user, \
     logout_user, current_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from config import config, Auth
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
+from forms import BookForm
 
 """avoid to run Flask App over https"""
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -19,6 +20,7 @@ app = Flask(__name__)
 app.config.from_object(config['dev'])
 # supress warnings caused possibly by Flask-SQLAlchemy Extension
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'secret46 key'  # CSRF Protection
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
@@ -100,6 +102,11 @@ def get_google_auth(state=None, token=None):
     return oauth
 
 
+@app.route('/form')
+def show_book():
+    return render_template('form.html')
+
+
 @app.route('/collection')
 def show_collection():
     return render_template('collection.html')
@@ -149,6 +156,19 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('show_landing'))
+
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    form = BookForm()
+    if request.method == 'POST':
+        if form.validate() is False:
+            flash('All fields are required')
+            return render_template('form.html', form=form)
+        else:
+            return 'Book added'
+    elif request.method == 'GET':
+        return render_template('form.html', form=form)
 
 
 @app.route('/callback')
