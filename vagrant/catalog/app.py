@@ -9,7 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 from config import config, Auth
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
-from forms import BookForm
+from forms import BookForm, images
+from flask_uploads import configure_uploads
 
 """avoid to run Flask App over https"""
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -20,13 +21,14 @@ app = Flask(__name__)
 app.config.from_object(config['dev'])
 # supress warnings caused possibly by Flask-SQLAlchemy Extension
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'secret46 key'  # CSRF Protection
 db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.session_protection = "strong"
 
+# Configuration for flask-uploads
+configure_uploads(app, images)
 
 """ DB Models """
 
@@ -64,12 +66,12 @@ class Item(db.Model):
     __tablename__ = 'book'
 # Add Column for Date added Timestamp
     id = db.Column(db.Integer, primary_key=True)
+    added_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     title = db.Column(db.String(250), nullable=False)
     author = db.Column(db.String(250), nullable=False)
-    description = db.Column(db.String(250), nullable=False)
-    url = db.Column(db.String(250))
-    pic_url = db.Column(db.String(250))
-    release_date = db.Column(db.String(250))
+    description = db.Column(db.String(250), default=None, nullable=True)
+    img_filename = db.Column(db.String(250), default=None, nullable=True)
+    img_url = db.Column(db.String(250), default=None, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship(User)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
@@ -80,8 +82,12 @@ class Item(db.Model):
         """return object data in easily serializeable format"""
         return {'id': self.id,
                 'title': self.title,
+                'author': self.author,
+                'description': self.description,
                 'genre': self.genre,
-                'item_type': self.item_type}
+                'img_filename': self.img_filename,
+                'img_url': self.img_url
+                }
 
 
 """helper function to create Oauth2 Session """

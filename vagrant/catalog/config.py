@@ -17,6 +17,11 @@ class Auth:
 class Config:
     APP_NAME = "Bookshelf Client"
     SECRET_KEY = os.environ.get("SECRET_KEY") or "Wl17sm090nFlvE-cmx9Q4hRm"
+    # Uploads
+    UPLOADS_DEFAULT_DEST = basedir + '/static/img/'
+    UPLOADS_DEFAULT_URL = 'http://localhost:5003/static/img/'
+    UPLOADED_IMAGES_DEST = basedir + '/static/img/'
+    UPLOADED_IMAGES_URL = 'http://localhost:5003/static/img/'
 
 
 class DevConfig(Config):

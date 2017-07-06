@@ -13,7 +13,7 @@
 </div>
 {% endfor %}
 <main class="pa4 black-80 avenir">
-  <form action="{{ url_for('add') }}" class="measure center" method="post">
+  <form enctype=multipart/form-data action="{{ url_for('add') }}" class="measure center" method="post">
     <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
       <legend class="f4 fw6 ph0 mh0">Add Book</legend>
       {{ form.hidden_tag() }}
@@ -26,16 +26,16 @@
         {{ form.author(class_='pa2 input-reset ba bg-transparent w-100') }}
       </div>
       <div class="mv3">
-        {{ form.isbn.label(class_='db fw6 lh-copy f6') }}
-        {{ form.isbn(class_='pa2 input-reset ba bg-transparent w-100') }}
-      </div>
-      <div class="mv3">
         {{ form.genre.label(class_='db fw6 lh-copy f6') }}
         {{ form.genre(class_='pa2 input-reset ba bg-transparent w-100') }}
       </div>
       <div class="mv3">
         {{ form.description.label(class_='db fw6 lh-copy f6') }}
         {{ form.description(class_='db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2') }}
+      </div>
+       <div class="mv3">
+        {{ form.image.label(class_='db fw6 lh-copy f6') }}
+        {{ form.image(class_='pt3') }}
       </div>
     </fieldset>
     <div class="">
