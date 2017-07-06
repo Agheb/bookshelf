@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block login %} {{ super() }} {% endblock %} {% block content %}
+<div class="w-100-l ph5-ns center contain">
+  <div class="w-25-l dib">
+    <h2 class="ma-2 avenir tc">Genre</h2>
+    <ul class="list pl0 ml0">
+      {% for genre in genres %}
+      <li class="ph3 pv2 tc"> {{ genre.name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="w-75-l dib cf fr-l relative">
+    <h2 class="ma-2 avenir tc">Latest added Books</h2>
+    <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
+    <div class="aspect-ratio aspect-ratio--1x1">
+      <img style="background-image:url(http://mrmrs.github.io/images/0006.jpg);" 
+      class="db bg-center cover aspect-ratio--object" />
+    </div>
+    <a href="#0" class="ph2 ph0-ns pb3 link db">
+      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
+      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
+    </a>
+  </article>
+  <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
+    <div class="aspect-ratio aspect-ratio--1x1">
+      <img style="background-image:url(http://mrmrs.github.io/images/0002.jpg);" 
+      class="db bg-center cover aspect-ratio--object" />
+    </div>
+    <a href="#0" class="ph2 ph0-ns pb3 link db">
+      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
+      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
+    </a>
+  </article>
+  <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
+    <div class="aspect-ratio aspect-ratio--1x1">
+      <img style="background-image:url(http://mrmrs.github.io/images/0003.jpg);" 
+      class="db bg-center cover aspect-ratio--object" />
+    </div>
+    <a href="#0" class="ph2 ph0-ns pb3 link db">
+      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
+      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
+    </a>
+  </article>
+  <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
+    <div class="aspect-ratio aspect-ratio--1x1">
+      <img style="background-image:url(http://mrmrs.github.io/images/0004.jpg);" 
+      class="db bg-center cover aspect-ratio--object" />
+    </div>
+    <a href="#0" class="ph2 ph0-ns pb3 link db">
+      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
+      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
+    </a>
+</div>
+{% endblock %}
+{% block footer %}
+{{ super() }}
+{% endblock %}

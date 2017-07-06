@@ -6,7 +6,7 @@ var exec = require('child_process').exec;
 
 //Run Flask server
 gulp.task('runserver', function() {
-    var proc = exec('python app.py');
+    var proc = exec('python run.py');
 });
 
 // Default task: Watch Files For Changes & Reload browser
@@ -18,6 +18,6 @@ gulp.task('default', ['runserver'], function () {
 
   });
  
-  gulp.watch(['templates/*.*'], reload);
+  gulp.watch(['app/templates/*.*'], reload);
 
 });

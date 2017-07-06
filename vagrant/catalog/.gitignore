@@ -1,0 +1,13 @@
+# Python Dirt
+__pycache__/
+*.py[cod]
+*$py.class
+ 
+# Mac dirt
+.DS_Store
+ 
+# VS Code files
+.vscode/
+ 
+# Node_Modules Folder - used for Gulp 
+node_modules/

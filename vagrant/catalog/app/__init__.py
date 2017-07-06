@@ -19,7 +19,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
 app.config.from_object(config['dev'])
-# supress warnings caused possibly by Flask-SQLAlchemy Extension
+# supress warnings caused by Flask-SQLAlchemy Extension
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -53,8 +53,6 @@ class Genre(db.Model):
     __tablename__ = 'genre'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship(User)
 
     @property
     def serialize(self):
@@ -75,7 +73,7 @@ class Item(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship(User)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
-    genre = db.relationship(Genre)
+    genre = db.relationship(Genre, backref=db.backref('books', lazy='dynamic'))
 
     @property
     def serialize(self):
@@ -115,7 +113,8 @@ def show_book():
 
 @app.route('/collection')
 def show_collection():
-    return render_template('collection.html')
+    genres = db.session.query(Genre).all()
+    return render_template('collection.html', genres=genres)
 
 
 @app.route('/')
@@ -214,8 +213,3 @@ def callback():
             login_user(user)
             return redirect(url_for('index'))
         return 'Could not fetch your information.'
-
-
-if __name__ == '__main__':
-    app.debug = True
-    app.run(port=5003)
