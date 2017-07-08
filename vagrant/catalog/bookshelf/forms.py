@@ -1,10 +1,8 @@
+from bookshelf import images
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import InputRequired
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from flask_uploads import UploadSet, IMAGES
-
-images = UploadSet('images', IMAGES)
 
 
 class BookForm(FlaskForm):

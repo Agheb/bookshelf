@@ -1,34 +1,15 @@
 import datetime
 import json
-import os
-from flask import Flask, render_template, request, \
+from bookshelf import app, db, login_manager
+from flask import render_template, request, \
     redirect, url_for, jsonify, session, flash
-from flask_login import LoginManager,  login_required, login_user, \
+from flask_login import login_required, login_user, \
     logout_user, current_user, UserMixin
-from flask_sqlalchemy import SQLAlchemy
-from config import config, Auth
+from config import Auth
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
-from forms import BookForm, images
-from flask_uploads import configure_uploads
+from forms import BookForm
 
-"""avoid to run Flask App over https"""
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-
-""" Flask App Creation """
-
-app = Flask(__name__)
-app.config.from_object(config['dev'])
-# supress warnings caused by Flask-SQLAlchemy Extension
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
-login_manager.session_protection = "strong"
-
-# Configuration for flask-uploads
-configure_uploads(app, images)
 
 """ DB Models """
 
