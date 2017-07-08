@@ -18,6 +18,6 @@ gulp.task('default', ['runserver'], function () {
 
   });
  
-  gulp.watch(['app/templates/*.*'], reload);
+  gulp.watch(['bookshelf/templates/*.*'], reload);
 
 });
