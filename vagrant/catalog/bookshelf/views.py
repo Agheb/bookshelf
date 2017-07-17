@@ -1,6 +1,7 @@
 import datetime
 import json
-from bookshelf import app, db, login_manager
+import forms
+from bookshelf import app, db, login_manager, images
 from flask import render_template, request, \
     redirect, url_for, jsonify, session, flash
 from flask_login import login_required, login_user, \
@@ -8,7 +9,6 @@ from flask_login import login_required, login_user, \
 from config import Auth
 from requests_oauthlib import OAuth2Session
 from requests.exceptions import HTTPError
-from forms import BookForm
 
 
 """ DB Models """
@@ -35,6 +35,9 @@ class Genre(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
 
+    def __str__(self):
+        return self.name
+
     @property
     def serialize(self):
         """return object data in easily serializeable format"""
@@ -51,8 +54,8 @@ class Item(db.Model):
     description = db.Column(db.String(250), default=None, nullable=True)
     img_filename = db.Column(db.String(250), default=None, nullable=True)
     img_url = db.Column(db.String(250), default=None, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship(User)
+    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # user = db.relationship(User)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
     genre = db.relationship(Genre, backref=db.backref('books', lazy='dynamic'))
 
@@ -95,7 +98,8 @@ def show_book():
 @app.route('/collection')
 def show_collection():
     genres = db.session.query(Genre).all()
-    return render_template('collection.html', genres=genres)
+    books = db.session.query(Item).all()
+    return render_template('collection.html', genres=genres, books=books)
 
 
 @app.route('/')
@@ -146,13 +150,21 @@ def logout():
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():
-    form = BookForm()
+    form = forms.BookForm()
     if request.method == 'POST':
-        if form.validate() is False:
+        if form.validate_on_submit():
+            img_filename = images.save(request.files['image'])
+            img_url = images.url(img_filename)
+            new_book = Item(title=form.title.data, author=form.author.data,
+                            description=form.description.data, img_url=img_url,
+                            img_filename=img_filename)
+            db.session.add(new_book)
+            db.session.commit()
+            flash('New Book added')
+            return redirect(url_for('show_collection'))
+        else:
             flash('All fields are required')
             return render_template('form.html', form=form)
-        else:
-            return 'Book added'
     elif request.method == 'GET':
         return render_template('form.html', form=form)
 

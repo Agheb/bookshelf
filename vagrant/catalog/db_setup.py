@@ -1,4 +1,5 @@
-from app import db, User, Genre, Item
+from bookshelf import db
+from bookshelf.views import User, Genre, Item
 
 db.create_all()
 genre_ls = ['Science fiction', 'Satire', 'Drama',
