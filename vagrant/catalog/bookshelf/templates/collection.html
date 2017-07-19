@@ -1,4 +1,8 @@
-{% extends "base.html" %} {% block login %} {{ super() }} {% endblock %} {% block content %}
+{% extends "base.html" %} {% block login %} {% if current_user.is_authenticated %}
+<img class="dib w2 h2 br-100 v-mid" src="{{ current_user.avatar }}"/>
+<a class="v-mid ph3 link dim dark-gray tc tl-ns f3 f5-ns db dib-ns pv1 mr0" href="#" title="User">{{current_user.name}}</a>
+<a class="v-mid f6 link dim br3 ph3 pv1 dib white bg-dark-gray" href="{{url_for('logout')}}">Logout</a> {% else %} {{ super()
+}} {% endif %} {% endblock %} {% block content %}
 <div class="w-100-l ph5-ns center contain">
   <div class="w-25-l dib">
     <h2 class="ma-2 avenir tc">Genre</h2>
@@ -16,21 +20,21 @@
     <h2 class="ma-2 avenir tc">{{ genre_name | default('Books') }}</h2>
     {% for book in books %}
     <article class="dt w-100 bb b--black-10 pb2 mt2">
-        <div class="dtc w4 v-mid">
-          <a class="grow db" href="">
+      <div class="dtc w4 v-mid">
+        <a class="grow db" href="">
              <img src="{{ book.img_url }}" class="db w-100 br2" />
           </a>
-        </div>
-        <div class="dtc v-mid pl4">
-          <h1 class="f4 fw6 lh-title black mv0">{{ book.title }}</h1>
-          <h2 class="f5 fw4 mt2 mb0 black-60">{{ book.author }}</h2>
-        </div>
-        {% if user.is_authenticated %}
-        <div class="dtc v-mid">
-          <a href="#0" class="tr pl4 blue link dim db">Edit</a>
-          <a href="#0" class="tr pl4 blue link dim db">Delete</a>
-        </div>
-       {% endif %}
+      </div>
+      <div class="dtc v-mid pl4">
+        <h1 class="f4 fw6 lh-title black mv0">{{ book.title }}</h1>
+        <h2 class="f5 fw4 mt2 mb0 black-60">{{ book.author }}</h2>
+      </div>
+      {% if user.is_authenticated %}
+      <div class="dtc v-mid">
+        <a href="#0" class="tr pl4 blue link dim db">Edit</a>
+        <a href="#0" class="tr pl4 blue link dim db">Delete</a>
+      </div>
+      {% endif %}
     </article>
     {% endfor %}
   </div>
