@@ -35,6 +35,8 @@ class Genre(db.Model):
     __tablename__ = 'genre'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
+    items = db.relationship('Item', backref=db.backref(
+        'genre', lazy='joined'), lazy='dynamic')
 
     def __str__(self):
         return self.name
@@ -42,7 +44,7 @@ class Genre(db.Model):
     @property
     def serialize(self):
         """return object data in easily serializeable format"""
-        return {'name': self.name, 'id': self.id}
+        return {'name': self.name, 'genre_id': self.id}
 
 
 class Item(db.Model):
@@ -58,16 +60,15 @@ class Item(db.Model):
     # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     # user = db.relationship(User)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
-    genre = db.relationship(Genre, backref=db.backref('book', lazy='dynamic'))
 
     @property
     def serialize(self):
         """return object data in easily serializeable format"""
-        return {'id': self.id,
+        return {'item_id': self.id,
                 'title': self.title,
                 'author': self.author,
                 'description': self.description,
-                'genre': self.genre,
+                'genre': self.genre.serialize,
                 'img_filename': self.img_filename,
                 'img_url': self.img_url
                 }
@@ -166,7 +167,7 @@ def add():
             img_url = images.url(img_filename)
             new_book = Item(title=form.title.data,
                             author=form.author.data,
-                            genre=form.genre.data,
+                            genre_id=form.genre.data.id,
                             description=form.description.data,
                             img_url=img_url,
                             img_filename=img_filename)
