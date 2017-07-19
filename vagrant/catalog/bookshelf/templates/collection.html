@@ -8,61 +8,24 @@
       {% endfor %}
     </ul>
   </div>
-  <div class="w-75-l dib cf fr-l relative">
-    <h2 class="ma-2 avenir tc">Latest added Books</h2>
+  <div class="w-75 dib cf fr-l center">
+    <h2 class="ma-2 avenir tc">Books</h2>
     {% for book in books %}
-        <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
-          <div class="aspect-ratio aspect-ratio--1x1">
-            <img style="background-image:url({{ book.img_url }});" class="db bg-center cover aspect-ratio--object"
-            />
-          </div>
-          <a href="#0" class="ph2 ph0-ns pb3 link db">
-            <h3 class="f5 f4-ns mb0 black-90">{{ book.title }}</h3>
-            <h3 class="f6 f5 fw4 mt2 black-60">{{ book.author }}</h3>
+    <article class="dt w-100 bb b--black-10 pb2 mt2">
+        <div class="dtc w4 v-mid">
+          <a class="grow db" href="">
+             <img src="{{ book.img_url }}" class="db w-100 br2" />
           </a>
-        </article>
+        </div>
+        <div class="dtc v-mid pl4">
+          <h1 class="f4 fw6 lh-title black mv0">{{ book.title }}</h1>
+          <h2 class="f5 fw4 mt2 mb0 black-60">{{ book.author }}</h2>
+        </div>
+        <div class="dtc v-mid">
+          <a href="#0" class="tr pl4 blue link dim db">Edit</a>
+          <a href="#0" class="tr pl4 blue link dim db">Delete</a>
+        </div>
+    </article>
     {% endfor %}
-    <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
-    <div class="aspect-ratio aspect-ratio--1x1">
-      <img style="background-image:url(http://mrmrs.github.io/images/0006.jpg);" 
-      class="db bg-center cover aspect-ratio--object" />
-    </div>
-    <a href="#0" class="ph2 ph0-ns pb3 link db">
-      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
-      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
-    </a>
-  </article>
-  <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
-    <div class="aspect-ratio aspect-ratio--1x1">
-      <img style="background-image:url(http://mrmrs.github.io/images/0002.jpg);" 
-      class="db bg-center cover aspect-ratio--object" />
-    </div>
-    <a href="#0" class="ph2 ph0-ns pb3 link db">
-      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
-      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
-    </a>
-  </article>
-  <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
-    <div class="aspect-ratio aspect-ratio--1x1">
-      <img style="background-image:url(http://mrmrs.github.io/images/0003.jpg);" 
-      class="db bg-center cover aspect-ratio--object" />
-    </div>
-    <a href="#0" class="ph2 ph0-ns pb3 link db">
-      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
-      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
-    </a>
-  </article>
-  <article class="fl w-100 w-50-m  w-25-ns pa2-ns">
-    <div class="aspect-ratio aspect-ratio--1x1">
-      <img style="background-image:url(http://mrmrs.github.io/images/0004.jpg);" 
-      class="db bg-center cover aspect-ratio--object" />
-    </div>
-    <a href="#0" class="ph2 ph0-ns pb3 link db">
-      <h3 class="f5 f4-ns mb0 black-90">Title of piece</h3>
-      <h3 class="f6 f5 fw4 mt2 black-60">Subtitle of piece</h3>
-    </a>
-</div>
-{% endblock %}
-{% block footer %}
-{{ super() }}
-{% endblock %}
+  </div>
+  {% endblock %} {% block footer %} {{ super() }} {% endblock %}
