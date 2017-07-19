@@ -44,7 +44,7 @@ class Genre(db.Model):
     @property
     def serialize(self):
         """return object data in easily serializeable format"""
-        return {'name': self.name, 'genre_id': self.id}
+        return {'name': self.name, 'id': self.id}
 
 
 class Item(db.Model):
@@ -101,15 +101,17 @@ def show_form():
 def show_collection():
     genres = db.session.query(Genre).all()
     books = db.session.query(Item).all()
+
     return render_template('collection.html', genres=genres, books=books)
 
 
 @app.route('/genre/<genreid>')
-# TODO 404 Page
 def show_genre_items(genreid):
-    items = Item.query.join(Genre).filter(
-        Genre.id == genreid).order_by(desc(Item.added_at)).all()
-    return jsonify([i.serialize for i in items])
+    genres = Genre.query.all()
+    books = Genre.query.get(genreid).items.all()
+    name = Genre.query.get(genreid).name
+    return render_template('collection.html', genres=genres, books=books,
+                           genre_name=name)
 
 
 @app.route('/')
