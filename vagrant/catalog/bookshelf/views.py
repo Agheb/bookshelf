@@ -2,6 +2,7 @@ import datetime
 import json
 import forms
 from bookshelf import app, db, login_manager, images
+from sqlalchemy import desc
 from flask import render_template, request, \
     redirect, url_for, jsonify, session, flash
 from flask_login import login_required, login_user, \
@@ -57,7 +58,7 @@ class Item(db.Model):
     # user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     # user = db.relationship(User)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
-    genre = db.relationship(Genre, backref=db.backref('books', lazy='dynamic'))
+    genre = db.relationship(Genre, backref=db.backref('book', lazy='dynamic'))
 
     @property
     def serialize(self):
@@ -91,7 +92,7 @@ def get_google_auth(state=None, token=None):
 
 
 @app.route('/form')
-def show_book():
+def show_form():
     return render_template('form.html')
 
 
@@ -100,6 +101,14 @@ def show_collection():
     genres = db.session.query(Genre).all()
     books = db.session.query(Item).all()
     return render_template('collection.html', genres=genres, books=books)
+
+
+@app.route('/genre/<genreid>')
+# TODO 404 Page
+def show_genre_items(genreid):
+    items = Item.query.join(Genre).filter(
+        Genre.id == genreid).order_by(desc(Item.added_at)).all()
+    return jsonify([i.serialize for i in items])
 
 
 @app.route('/')
@@ -155,8 +164,11 @@ def add():
         if form.validate_on_submit():
             img_filename = images.save(request.files['image'])
             img_url = images.url(img_filename)
-            new_book = Item(title=form.title.data, author=form.author.data,
-                            description=form.description.data, img_url=img_url,
+            new_book = Item(title=form.title.data,
+                            author=form.author.data,
+                            genre=form.genre.data,
+                            description=form.description.data,
+                            img_url=img_url,
                             img_filename=img_filename)
             db.session.add(new_book)
             db.session.commit()
@@ -167,6 +179,15 @@ def add():
             return render_template('form.html', form=form)
     elif request.method == 'GET':
         return render_template('form.html', form=form)
+
+
+@app.route('/book/<bookid>')
+def show_book(bookid):
+    # TODO: add 404 Page first_or_404()
+    # TODO: template file add DB Query Results
+    book_item = Item.query.filter_by(id=bookid).first()
+    return jsonify(book_item.serialize)
+    # return render_template('book_view.html', book=book_item)
 
 
 @app.route('/callback')
