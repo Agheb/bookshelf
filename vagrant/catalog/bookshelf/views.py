@@ -102,7 +102,8 @@ def show_collection():
     genres = db.session.query(Genre).all()
     books = db.session.query(Item).all()
 
-    return render_template('collection.html', genres=genres, books=books)
+    return render_template('collection.html', genres=genres,
+                           books=books, user=current_user)
 
 
 @app.route('/genre/<genreid>')
@@ -111,7 +112,7 @@ def show_genre_items(genreid):
     books = Genre.query.get(genreid).items.all()
     name = Genre.query.get(genreid).name
     return render_template('collection.html', genres=genres, books=books,
-                           genre_name=name)
+                           genre_name=name, user=current_user)
 
 
 @app.route('/')

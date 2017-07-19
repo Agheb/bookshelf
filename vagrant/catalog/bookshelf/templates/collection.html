@@ -25,10 +25,12 @@
           <h1 class="f4 fw6 lh-title black mv0">{{ book.title }}</h1>
           <h2 class="f5 fw4 mt2 mb0 black-60">{{ book.author }}</h2>
         </div>
+        {% if user.is_authenticated %}
         <div class="dtc v-mid">
           <a href="#0" class="tr pl4 blue link dim db">Edit</a>
           <a href="#0" class="tr pl4 blue link dim db">Delete</a>
         </div>
+       {% endif %}
     </article>
     {% endfor %}
   </div>
