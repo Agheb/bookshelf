@@ -15,7 +15,7 @@ class BookForm(FlaskForm):
     title = StringField('Title', validators=[InputRequired()])
     author = StringField('Author', validators=[InputRequired()])
     genre = QuerySelectField('Genre', query_factory=genre_choices,
-                             allow_blank=True, validators=[InputRequired()])
+                             allow_blank=False, validators=[InputRequired()])
     description = TextAreaField('Description')
     image = FileField('Upload Bookcover', validators=[
                       FileRequired(), FileAllowed(images, 'Images only!')])
