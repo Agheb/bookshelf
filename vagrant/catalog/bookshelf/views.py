@@ -185,6 +185,31 @@ def add():
         return render_template('form.html', form=form)
 
 
+@app.route('/books/<bookid>/edit', methods=['GET', 'POST'])
+def edit_book(bookid):
+    book = Item.query.get(bookid)
+    img_url = Item.query.get(bookid).img_url
+    form = forms.EditForm(obj=book)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            if request.files:
+                img_filename = images.save(request.files['image'])
+                img_url = images.url(img_filename)
+                book.img_filename = img_filename
+                book.img_url = img_url
+            
+            form.populate_obj(book)
+            db.session.commit()
+            return redirect(url_for('show_collection'))
+        else:
+            flash('All fields are required')
+            return render_template('edit_form.html', form=form, id=bookid,
+                                   img=img_url)
+    elif request.method == 'GET':
+        return render_template('edit_form.html', form=form, id=bookid,
+                               img=img_url)
+
+
 @app.route('/book/<bookid>')
 def show_book(bookid):
     # TODO: add 404 Page first_or_404()
