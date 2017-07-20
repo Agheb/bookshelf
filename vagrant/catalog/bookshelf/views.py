@@ -161,7 +161,7 @@ def logout():
     return redirect(url_for('show_landing'))
 
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/book/add', methods=['GET', 'POST'])
 def add():
     form = forms.BookForm()
     if request.method == 'POST':
@@ -176,16 +176,15 @@ def add():
                             img_filename=img_filename)
             db.session.add(new_book)
             db.session.commit()
-            flash('New Book added')
             return redirect(url_for('show_collection'))
         else:
             flash('All fields are required')
-            return render_template('form.html', form=form)
+            return render_template('add_form.html', form=form)
     elif request.method == 'GET':
-        return render_template('form.html', form=form)
+        return render_template('add_form.html', form=form)
 
 
-@app.route('/books/<bookid>/edit', methods=['GET', 'POST'])
+@app.route('/book/<bookid>/edit', methods=['GET', 'POST'])
 def edit_book(bookid):
     book = Item.query.get(bookid)
     img_url = Item.query.get(bookid).img_url
