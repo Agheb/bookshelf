@@ -209,13 +209,12 @@ def edit_book(bookid):
                                img=img_url)
 
 
-@app.route('/book/<bookid>')
+@app.route('/books/<bookid>')
 def show_book(bookid):
     # TODO: add 404 Page first_or_404()
     # TODO: template file add DB Query Results
-    book_item = Item.query.filter_by(id=bookid).first()
-    return jsonify(book_item.serialize)
-    # return render_template('book_view.html', book=book_item)
+    book = Item.query.filter_by(id=bookid).first()
+    return render_template('book_view.html', book=book)
 
 
 @app.route('/callback')
