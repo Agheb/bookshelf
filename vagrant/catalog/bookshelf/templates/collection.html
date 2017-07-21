@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% block login %} {% if current_user.is_authenticated %}
-<img class="dib w2 h2 br-100 v-mid" src="{{ current_user.avatar }}"/>
+<img class="dib w2 h2 br-100 v-mid" src="{{ current_user.avatar }}" />
 <a class="v-mid ph3 link dim dark-gray tc tl-ns f3 f5-ns db dib-ns pv1 mr0" href="#" title="User">{{current_user.name}}</a>
-<a class="v-mid f6 link dim br3 ph3 pv1 dib white bg-dark-gray" href="{{url_for('logout')}}">Logout</a> {% else %} {{ super()
-}} {% endif %} {% endblock %} {% block content %}
+<a class="v-mid f6 link dim br3 ph3 pv1 dib white bg-dark-gray" href="{{url_for('logout')}}">Logout</a> {% else %} {{ super()}}
+{% endif %} {% endblock %} {% block content %}
 <div class="w-100-l ph5-ns center contain">
   <div class="w-25-l dib">
     <h2 class="ma-2 avenir tc">Genre</h2>
@@ -21,7 +21,7 @@
     {% for book in books %}
     <article class="dt w-100 bb b--black-10 pb2 mt2">
       <div class="dtc w4 v-mid">
-        <a class="grow db" href="">
+        <a class="grow db" href={{ url_for( 'show_book',bookid=book.id)}}>
              <img src="{{ book.img_url }}" class="db w-100 br2" />
           </a>
       </div>
@@ -31,11 +31,21 @@
       </div>
       {% if user.is_authenticated %}
       <div class="dtc v-mid">
-        <a href="#0" class="tr pl4 blue link dim db">Edit</a>
-        <a href="#0" class="tr pl4 blue link dim db">Delete</a>
+        <a href="{{ url_for('edit_book',bookid=book.id) }}" class="tr pl4 blue link dim db">Edit</a>
+        <a href="#0" class="tr pl4 blue link dim db delete">Delete</a>
       </div>
       {% endif %}
     </article>
     {% endfor %}
   </div>
+  <script>
+    $('a.delete').click(function () {
+      vex.dialog.confirm({
+        message: 'Are you sure you want to delete the Book ?',
+        callback: function (value) {
+          console.log(value)
+        }
+      })
+    })
+  </script>
   {% endblock %} {% block footer %} {{ super() }} {% endblock %}

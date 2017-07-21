@@ -5,7 +5,11 @@
   <title>Bookshelf</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/tachyons.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/vex.css')}}" />
+  <link rel="stylesheet" href="{{url_for('static', filename='css/vex-theme-wireframe.css')}}" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="{{url_for('static', filename='js/vex.combined.min.js')}}"></script>
+  <script>vex.defaultOptions.className = 'vex-theme-wireframe'</script>
 </head>
 
 <body class="avenir">
