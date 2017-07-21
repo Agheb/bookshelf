@@ -196,7 +196,7 @@ def edit_book(bookid):
                 img_url = images.url(img_filename)
                 book.img_filename = img_filename
                 book.img_url = img_url
-            
+
             form.populate_obj(book)
             db.session.commit()
             return redirect(url_for('show_collection'))
@@ -215,6 +215,17 @@ def show_book(bookid):
     # TODO: template file add DB Query Results
     book = Item.query.filter_by(id=bookid).first()
     return render_template('book_view.html', book=book)
+
+
+@app.route('/books/<bookid>/delete', methods=['POST'])
+# AJAX Post
+def delete_book(bookid):
+    book = Item.query.get_or_404(bookid)
+    db.session.delete(book)
+    db.session.commit()
+    return jsonify({
+        'status': 'OK',
+        'response': 'Book successfully removed from shelf'})
 
 
 @app.route('/callback')

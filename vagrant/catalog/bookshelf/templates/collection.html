@@ -32,20 +32,36 @@
       {% if user.is_authenticated %}
       <div class="dtc v-mid">
         <a href="{{ url_for('edit_book',bookid=book.id) }}" class="tr pl4 blue link dim db">Edit</a>
-        <a href="#0" class="tr pl4 blue link dim db delete">Delete</a>
+        <a href="{{ url_for('delete_book',bookid=book.id) }}" id="{{ book.id }}" class="tr pl4 blue link dim db delete">Delete</a>
       </div>
       {% endif %}
     </article>
     {% endfor %}
   </div>
   <script>
-    $('a.delete').click(function () {
+    $('a.delete').click(function (e) {
+      e.preventDefault();
       vex.dialog.confirm({
         message: 'Are you sure you want to delete the Book ?',
         callback: function (value) {
-          console.log(value)
+          if (value) {
+            $.ajax({
+              statusCode: {
+                404: function () {
+                  vex.alert('oops something went wrong');
+                }
+              },
+              url: e.target.href,
+              type: 'post',
+              success: function (res) {
+                vex.dialog.alert('Book removed from shelf');
+              }
+
+            });
+          }
+
         }
-      })
-    })
+      });
+    });
   </script>
   {% endblock %} {% block footer %} {{ super() }} {% endblock %}
