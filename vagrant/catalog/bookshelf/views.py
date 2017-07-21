@@ -220,12 +220,13 @@ def show_book(bookid):
 @app.route('/books/<bookid>/delete', methods=['POST'])
 # AJAX Post
 def delete_book(bookid):
-    book = Item.query.get_or_404(bookid)
+    book = Item.query.get(bookid)
     db.session.delete(book)
     db.session.commit()
     return jsonify({
         'status': 'OK',
-        'response': 'Book successfully removed from shelf'})
+        'response': 'Book removed from shelf',
+        'success': True})
 
 
 @app.route('/callback')

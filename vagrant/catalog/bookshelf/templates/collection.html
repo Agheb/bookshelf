@@ -38,30 +38,36 @@
     </article>
     {% endfor %}
   </div>
+  {# Confirm dialog to delete book #}
   <script>
-    $('a.delete').click(function (e) {
-      e.preventDefault();
-      vex.dialog.confirm({
-        message: 'Are you sure you want to delete the Book ?',
-        callback: function (value) {
-          if (value) {
-            $.ajax({
-              statusCode: {
-                404: function () {
-                  vex.alert('oops something went wrong');
+        $('a.delete').click(function(e) {
+        e.preventDefault(); // default action not triggered
+        vex.dialog.confirm({ // Confirm to delete book
+            message: 'Are you sure you want to delete the Book ?',
+            callback: function(value) {
+                if (value) { 
+                    $.ajax({  // POST request using AJAX
+                        statusCode: {
+                            404: function() {
+                                vex.alert('oops something went wrong');
+                            }
+                        },
+                        url: e.target.href, 
+                        type: 'post',
+                        success: function(res) {
+                            console.log(res)
+                            if(res.success){
+                               setTimeout(function(){ //reload page 
+                               location.reload(); 
+                              }, 1000);
+                            }
+                        }
+
+                    });
                 }
-              },
-              url: e.target.href,
-              type: 'post',
-              success: function (res) {
-                vex.dialog.alert('Book removed from shelf');
-              }
 
-            });
-          }
-
-        }
-      });
+            }
+        });
     });
   </script>
   {% endblock %} {% block footer %} {{ super() }} {% endblock %}
