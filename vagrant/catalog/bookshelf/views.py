@@ -49,7 +49,6 @@ class Genre(db.Model):
 
 class Item(db.Model):
     __tablename__ = 'book'
-# Add Column for Date added Timestamp
     id = db.Column(db.Integer, primary_key=True)
     added_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     title = db.Column(db.String(250), nullable=False)
@@ -74,28 +73,7 @@ class Item(db.Model):
                 }
 
 
-"""helper function to create Oauth2 Session """
-
-
-def get_google_auth(state=None, token=None):
-    if token:
-        return OAuth2Session(Auth.CLIENT_ID, token=token)
-    if state:
-        return OAuth2Session(
-            Auth.CLIENT_ID,
-            state=state,
-            redirect_uri=Auth.REDIRECT_URI)
-    oauth = OAuth2Session(
-        Auth.CLIENT_ID,
-        redirect_uri=Auth.REDIRECT_URI,
-        scope=Auth.SCOPE)
-    return oauth
-
-
-@app.route('/form')
-def show_form():
-    return render_template('form.html')
-
+""" Main View """
 
 @app.route('/collection')
 def show_collection():
@@ -106,6 +84,15 @@ def show_collection():
                            books=books, user=current_user)
 
 
+@app.route('/')
+@app.route('/home')
+def show_landing():
+    return render_template('layout.html')
+
+
+""" Genre """
+
+
 @app.route('/genre/<genreid>')
 def show_genre_items(genreid):
     genres = Genre.query.all()
@@ -114,17 +101,6 @@ def show_genre_items(genreid):
     return render_template('collection.html', genres=genres, books=books,
                            genre_name=name, user=current_user)
 
-
-@app.route('/')
-@app.route('/home')
-def show_landing():
-    return render_template('layout.html')
-
-
-@app.route('/genre/JSON')
-def get_genre_json():
-    items = db.session.query(Genre).all()
-    return jsonify(GenreItems=[i.serialize for i in items])
 
 
 @app.route('/genre/new', methods=['GET', 'POST'])
@@ -137,28 +113,13 @@ def new_genre():
         return redirect(url_for('get_genre_json'))
 
 
-@app.route('/index')
-@login_required
-def index():
-    return render_template('index.html')
+@app.route('/genre/JSON')
+def get_genre_json():
+    items = db.session.query(Genre).all()
+    return jsonify(GenreItems=[i.serialize for i in items])
 
 
-@app.route('/login')
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    google = get_google_auth()
-    auth_url, state = google.authorization_url(
-        Auth.AUTH_URI, access_type='offline')
-    session['oauth_state'] = state
-    return render_template('login.html', auth_url=auth_url)
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('show_landing'))
+""" Books View """
 
 
 @app.route('/book/add', methods=['GET', 'POST'])
@@ -229,6 +190,27 @@ def delete_book(bookid):
         'success': True})
 
 
+""" Authenfication/Authorization """
+
+
+@app.route('/login')
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    google = get_google_auth()
+    auth_url, state = google.authorization_url(
+        Auth.AUTH_URI, access_type='offline')
+    session['oauth_state'] = state
+    return render_template('login.html', auth_url=auth_url)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('show_landing'))
+
+
 @app.route('/callback')
 def callback():
     if current_user is not None and current_user.is_authenticated:
@@ -266,3 +248,26 @@ def callback():
             login_user(user)
             return redirect(url_for('index'))
         return 'Could not fetch your information.'
+
+@app.route('/index')
+@login_required
+def index():
+    return render_template('index.html')
+
+
+"""helper function to create Oauth2 Session """
+
+
+def get_google_auth(state=None, token=None):
+    if token:
+        return OAuth2Session(Auth.CLIENT_ID, token=token)
+    if state:
+        return OAuth2Session(
+            Auth.CLIENT_ID,
+            state=state,
+            redirect_uri=Auth.REDIRECT_URI)
+    oauth = OAuth2Session(
+        Auth.CLIENT_ID,
+        redirect_uri=Auth.REDIRECT_URI,
+        scope=Auth.SCOPE)
+    return oauth
