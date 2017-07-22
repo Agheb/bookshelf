@@ -153,7 +153,7 @@ def edit_book(bookid):
     form = forms.EditForm(obj=book)
     if request.method == 'POST':
         if form.validate_on_submit():
-            if request.files:
+            if request.files['images']:
 
                 img_filename = images.save(request.files['image'])
                 img_url = images.url(img_filename)
