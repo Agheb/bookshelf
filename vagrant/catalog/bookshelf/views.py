@@ -1,15 +1,13 @@
 import datetime
 import json
 import forms
-from bookshelf import app, db, login_manager, images
+from bookshelf import app, db, login_manager, images, google
 from sqlalchemy import desc
 from flask import render_template, request, \
     redirect, url_for, jsonify, session, flash
 from flask_login import login_required, login_user, \
     logout_user, current_user, UserMixin
 from config import Auth
-from requests_oauthlib import OAuth2Session
-from requests.exceptions import HTTPError
 
 
 """ DB Models """
@@ -21,9 +19,9 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(250), nullable=True)
     avatar = db.Column(db.String(200))
     email = db.Column(db.String(250), nullable=False)
-    active = db.Column(db.Boolean, default=False)
-    tokens = db.Column(db.Text)
+    auth_id = db.Column(db.String(250), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    active = db.Column(db.Boolean, default=False)
 
 
 @login_manager.user_loader
@@ -75,16 +73,17 @@ class Item(db.Model):
 
 """ Main View """
 
+
+@app.route('/')
 @app.route('/collection')
 def show_collection():
     genres = db.session.query(Genre).all()
     books = db.session.query(Item).all()
 
     return render_template('collection.html', genres=genres,
-                           books=books, user=current_user)
+                           books=books)
 
 
-@app.route('/')
 @app.route('/home')
 def show_landing():
     return render_template('layout.html')
@@ -99,8 +98,7 @@ def show_genre_items(genreid):
     books = Genre.query.get(genreid).items.all()
     name = Genre.query.get(genreid).name
     return render_template('collection.html', genres=genres, books=books,
-                           genre_name=name, user=current_user)
-
+                           genre_name=name)
 
 
 @app.route('/genre/new', methods=['GET', 'POST'])
@@ -123,6 +121,7 @@ def get_genre_json():
 
 
 @app.route('/book/add', methods=['GET', 'POST'])
+@login_required
 def add():
     form = forms.BookForm()
     if request.method == 'POST':
@@ -137,6 +136,7 @@ def add():
                             img_filename=img_filename)
             db.session.add(new_book)
             db.session.commit()
+            flash('Book added')
             return redirect(url_for('show_collection'))
         else:
             flash('All fields are required')
@@ -146,6 +146,7 @@ def add():
 
 
 @app.route('/book/<bookid>/edit', methods=['GET', 'POST'])
+@login_required
 def edit_book(bookid):
     book = Item.query.get(bookid)
     img_url = Item.query.get(bookid).img_url
@@ -153,6 +154,7 @@ def edit_book(bookid):
     if request.method == 'POST':
         if form.validate_on_submit():
             if request.files:
+
                 img_filename = images.save(request.files['image'])
                 img_url = images.url(img_filename)
                 book.img_filename = img_filename
@@ -193,15 +195,38 @@ def delete_book(bookid):
 """ Authenfication/Authorization """
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    google = get_google_auth()
-    auth_url, state = google.authorization_url(
-        Auth.AUTH_URI, access_type='offline')
-    session['oauth_state'] = state
-    return render_template('login.html', auth_url=auth_url)
+        return redirect(url_for('show_collection'))
+
+    return google.authorize(callback=url_for('callback', _external=True))
+
+
+@app.route('/callback')
+def callback():
+    resp = google.authorized_response()
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session['google_token'] = (resp['access_token'], '')
+    resp = google.get('userinfo')
+    # look for user in db
+    user = User.query.filter_by(auth_id=resp.data['id']).first()
+
+    if user is None:
+        user = User()
+        user.name = resp.data['name']
+        user.email = resp.data['email']
+        user.avatar = resp.data['picture']
+        user.auth_id = resp.data['id']
+        db.session.add(user)
+        db.session.commit()
+
+    login_user(user)
+    return redirect(url_for('show_collection'))
 
 
 @app.route('/logout')
@@ -211,63 +236,6 @@ def logout():
     return redirect(url_for('show_landing'))
 
 
-@app.route('/callback')
-def callback():
-    if current_user is not None and current_user.is_authenticated:
-        return redirect(url_for('index'))
-    if 'error' in request.args:
-        if request.args.get('error') == 'access_denied':
-            return 'You denied access.'
-        return 'Error encountered.'
-    if 'code' not in request.args and 'state' not in request.args:
-        return redirect(url_for('login'))
-    else:
-        google = get_google_auth(state=session['oauth_state'])
-        try:
-            token = google.fetch_token(
-                Auth.TOKEN_URI,
-                client_secret=Auth.CLIENT_SECRET,
-                authorization_response=request.url)
-        except HTTPError:
-            return 'HTTPError occurred.'
-        google = get_google_auth(token=token)
-        resp = google.get(Auth.USER_INFO)
-        if resp.status_code == 200:
-            user_data = resp.json()
-            email = user_data['email']
-            user = User.query.filter_by(email=email).first()
-            if user is None:
-                user = User()
-                user.email = email
-            user.name = user_data['name']
-            print(token)
-            user.tokens = json.dumps(token)
-            user.avatar = user_data['picture']
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            return redirect(url_for('index'))
-        return 'Could not fetch your information.'
-
-@app.route('/index')
-@login_required
-def index():
-    return render_template('index.html')
-
-
-"""helper function to create Oauth2 Session """
-
-
-def get_google_auth(state=None, token=None):
-    if token:
-        return OAuth2Session(Auth.CLIENT_ID, token=token)
-    if state:
-        return OAuth2Session(
-            Auth.CLIENT_ID,
-            state=state,
-            redirect_uri=Auth.REDIRECT_URI)
-    oauth = OAuth2Session(
-        Auth.CLIENT_ID,
-        redirect_uri=Auth.REDIRECT_URI,
-        scope=Auth.SCOPE)
-    return oauth
+@google.tokengetter
+def get_google_oauth_token():
+    return session.get('google_token')

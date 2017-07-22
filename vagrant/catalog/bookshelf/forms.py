@@ -23,6 +23,6 @@ class BookForm(FlaskForm):
 
 
 class EditForm(BookForm):
-    image = FileField('Upload Bookcover', validators=[
+    image = FileField('Upload new Bookcover', validators=[
                       FileAllowed(images, 'Images only!')])
     submit = SubmitField('Edit')

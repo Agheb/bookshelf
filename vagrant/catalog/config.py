@@ -11,7 +11,7 @@ class Auth:
     AUTH_URI = 'https://accounts.google.com/o/oauth2/auth'
     TOKEN_URI = 'https://accounts.google.com/o/oauth2/token'
     USER_INFO = 'https://www.googleapis.com/userinfo/v2/me'
-    SCOPE = ['profile', 'email']
+    SCOPE = {'scope': 'email profile'}
 
 
 class Config:
