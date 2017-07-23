@@ -19,7 +19,7 @@
     {% for book in books %}
     <article class="dt w-100 bb b--black-10 pb2 mt2">
       <div class="dtc w4 v-mid">
-        <a class="grow db" href={{ url_for( 'show_book',bookid=book.id)}}>
+        <a class="grow db" href={{url_for( 'show_book',bookid=book.id)}}>
              <img src="{{ book.img_url }}" class="db w-100 br2" />
           </a>
       </div>
@@ -40,8 +40,9 @@
   <script>
         $('a.delete').click(function(e) {
         e.preventDefault(); // default action not triggered
+        vex.dialog.buttons.YES.text = 'Delete';
         vex.dialog.confirm({ // Confirm to delete book
-            message: 'Are you sure you want to delete the Book ?',
+            message: 'Delete book ?',
             callback: function(value) {
                 if (value) { 
                     $.ajax({  // POST request using AJAX
