@@ -81,11 +81,18 @@ class Item(db.Model):
 ################
 
 
-@app.route('/bookshelf.json')
+@app.route('/collection/JSON')
 def catalogJSON():
     """ return all bookshelf data in JSON """
     genres = db.session.query(Item).all()
-    return jsonify(GenreItems=[i.serialize for i in genres])
+    return jsonify(Items=[i.serialize for i in genres])
+
+
+@app.route('/book/<int:bookid>/JSON')
+def book_JSON(bookid):
+    """ return book data by given book_id in JSON """
+    item = Item.query.get(bookid)
+    return jsonify(item.serialize)
 
 
 @app.route('/')
