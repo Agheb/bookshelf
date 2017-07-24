@@ -95,8 +95,10 @@ def show_collection(page=1):
     """ Main view """
     genres = Genre.query.all()
     count = Item.query.count()
+    # descending order by date
+    book_q = Item.query.order_by(desc(Item.added_at))
     # handle pagination with Flask-SQLAlchemy
-    books = Item.query.paginate(page, 3, False)
+    books = book_q.paginate(page, 3, False)
     return render_template('collection.html', genres=genres,
                            books=books, count=count)
 
