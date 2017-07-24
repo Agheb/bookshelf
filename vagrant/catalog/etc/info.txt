@@ -1,4 +1,72 @@
-ClientID
-284925138049-7ot1r4jri1qmlkqadnj0ksrfci8ql034.apps.googleusercontent.com
-ClientSecret
-Wl17sm090nFlvE-cmx9Q4hRm
+Algorithms to Live By: The Computer Science of Human Decisions
+Brian Christian
+
+Science
+
+A fascinating exploration of how insights from computer algorithms can be applied to our everyday lives, helping to solve common decision-making problems and illuminate the workings of the human mind
+In a dazzlingly interdisciplinary work, acclaimed author Brian Christian and cognitive scientist Tom Griffiths show how the algorithms used by computers can also untangle very human questions. They explain how to have better hunches and when to leave things to chance, how to deal with overwhelming choices and how best to connect with others.
+
+
+Moonwalking with Einstein: The Art and Science of Remembering Everything
+Joshua Foer
+
+Moonwalking with Einstein draws on cutting-edge research, a surprising cultural history of memory, and venerable tricks of the mentalist's trade to transform our understanding of human remembering. Under the tutelage of top "mental athletes," he learns ancient techniques once employed by Cicero to memorize his speeches and by Medieval scholars to memorize entire books. Using methods that have been largely forgotten, Foer discovers that we can all dramatically improve our memories.
+
+Switch: How to Change Things When Change Is Hard
+Chip Heath
+
+Science
+
+Why is change so difficult and frightening? How do you create change when you have few resources and no title or authority to back you up? Chip and Dan Heath, the best-selling authors of Made to Stick, are back with a ground-breaking book that addresses one of the greatest challenges of our personal and professional lives — how to change things when change is hard
+
+Kafka on the Shore
+
+Haruki Murakami
+
+Fiction
+
+Kafka on the Shore is powered by two remarkable characters: a teenage boy, Kafka Tamura, who runs away from home either to escape a gruesome oedipal prophecy or to search for his long-missing mother and sister; and an aging simpleton called Nakata, who never recovered from a wartime affliction and now is drawn toward Kafka for reasons that, like the most basic activities of daily life, he cannot fathom.
+
+Man's Search for Meaning
+Viktor Frankl 
+
+Psychology
+
+Psychiatrist Viktor Frankl's memoir has riveted generations of readers with its descriptions of life in Nazi death camps and its lessons for spiritual survival. Between 1942 and 1945 Frankl labored in four different camps, including Auschwitz, while his parents, brother, and pregnant wife perished. Based on his own experience and the experiences of others he treated later in his practice, Frankl argues that we cannot avoid suffering but we can choose how to cope with it, find meaning in it, and move forward with renewed purpose. Frankl's theory-known as logotherapy, from the Greek word logos ("meaning")-holds that our primary drive in life is not pleasure, as Freud maintained, but the discovery and pursuit of what we personally find meaningful.
+
+Introduction to Algorithms
+Thomas Cormen
+
+Computer Science
+
+
+The Pragmatic Programmer: From Journeyman to Master
+Andrew Hunt
+
+Computer Science
+
+The Pragmatic Programmer cuts through the increasing specialization and technicalities of modern software development to examine the core process--taking a requirement and producing working, maintainable code that delights its users. It covers topics ranging from personal responsibility and career development to architectural techniques for keeping your code flexible and easy to adapt and reuse
+
+
+The Little Prince & Letter to a Hostage
+Antoine de Saint-Exupéry
+
+Children
+
+The Little Prince is the most translated book in the French language. With a timeless charm it tells the story of a little boy who leaves the safety of his own tiny planet to travel the universe, learning the vagaries of adult behavior through a series of extraordinary encounters. His personal odyssey culminates in a voyage to Earth and further adventures. 
+
+Letter to a Hostage, which contains certain theme that were appear ini The Little Prince, is Saint-Exupery's optimistic and humane open letter to a Jewish intellectual hiding in occupied France in 1943 Despite the tumor-shrinking medical miracle that has bought her a few years, Hazel has never been anything but terminal, her final chapter inscribed upon diagnosis. But when a gorgeous plot twist named Augustus Waters suddenly appears at Cancer Kid Support Group, Hazel's story is about to be completely rewritten(less)
+
+
+The Hitchhiker's Guide to the Galaxy
+Douglas Adams
+
+Science Fiction 
+
+Together, this dynamic pair began a journey through space aided by a galaxyful of fellow travelers: Zaphod Beeblebrox, the two-headed, three-armed, ex-hippie and totally out-to-lunch president of the galaxy; Trillian (formerly Tricia McMillan), Zaphod’s girlfriend, whom Arthur tried to pick up at a cocktail party once upon a time zone; Marvin, a paranoid, brilliant, and chronically depressed robot; and Veet Voojagig, a former graduate student obsessed with the disappearance of all the ballpoint pens he’s bought over the years.
+
+
+The Fault in Our Stars
+John Green
+Romance 
+

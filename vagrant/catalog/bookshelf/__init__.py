@@ -17,10 +17,11 @@ app.config.from_object(config['dev'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Configuration for flask-uploads
+# Flask-Uploads
 images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
 
+# Flask-OAuth
 oauth = OAuth(app)
 google = oauth.remote_app(
     'google',
@@ -38,6 +39,11 @@ google = oauth.remote_app(
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.session_protection = "strong"
+
+"""
+Ignore PEP8 Violation because modules must be imported after the application
+object is created (http://flask.pocoo.org/docs/0.12/patterns/packages/)
+"""
 
 import bookshelf.views
 import bookshelf.forms
