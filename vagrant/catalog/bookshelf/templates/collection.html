@@ -1,10 +1,15 @@
 {% extends "base.html" %} {% block content %}
-<div class="w-100-l ph5-ns center contain">
-  <div class="w-25-l dib">
-    <h2 class="ma-2 avenir fw6 near-black tc">Genre</h2>
+<div class="w-100-l ph5 pv3 center contain">
+  <div class="w-25-l dib ">
+    <h2 class="avenir fw6 near-black">Genre</h2>
     <ul class="list pl0 ml0">
+      <li class="pv2">
+        <a href="{{ url_for('show_collection')}}" class="link blue lh-title">
+          <span class="fw5 underline-hover">All ({{ count }})</span>
+        </a>
+      </li>
       {% for genre in genres %}
-      <li class="ph3 pv2 tc">
+      <li class="pv2">
         <a href="{{ url_for('show_genre_items', genreid=genre.id) }}" class="link blue lh-title">
           <span class="fw4 underline-hover">{{ genre.name }} ({{ genre.items.all() | length }})</span>
         </a>
@@ -13,7 +18,7 @@
     </ul>
   </div>
   <div class="w-75 dib cf fr-l center">
-    <h2 class="ma-2 avenir fw6 tc near-black">Books</h2>
+    <h2 class="ma-2 avenir fw6 tc near-black">All</h2>
     {% for book in books.items %}
     <article class="dt w-100 bb b--black-10 pb2 mt2">
       <div class="dtc w4 v-mid">
@@ -35,7 +40,7 @@
     {% endfor %}
     <div class="flex items-center justify-center pa4">
       {% if books.has_prev %}
-      <a href="{{ url_for('show_collection',page=books.prev_num) }}" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4">
+      <a href="{{ url_for('show_collection',page=books.prev_num) }}" class="bw1 f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4">
         <svg class="w1" data-icon="chevronLeft" viewBox="0 0 32 32" style="fill:currentcolor">
           <title>chevronLeft icon</title>
           <path d="M20 1 L24 5 L14 16 L24 27 L20 31 L6 16 z"></path>
@@ -43,7 +48,7 @@
         <span class="pl1 f5">Prev</span>
       </a>
       {% else %}
-      <a href="#" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4">
+      <a href="#" class="bw1 f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4">
         <svg class="w1" data-icon="chevronLeft" viewBox="0 0 32 32" style="fill:currentcolor">
           <title>chevronLeft icon</title>
           <path d="M20 1 L24 5 L14 16 L24 27 L20 31 L6 16 z"></path>
@@ -51,14 +56,14 @@
         <span class="pl1 f5">Prev</span>
       </a>
       {% endif %} {% if books.has_next %}
-      <a href="{{ url_for('show_collection',page=books.next_num) }}" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box">
+      <a href="{{ url_for('show_collection',page=books.next_num) }}" class="bw1 f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box">
         <span class="pr1 f5">Next</span>
             <svg class="w1" data-icon="chevronRight" viewBox="0 0 32 32" style="fill:currentcolor">
                 <title>chevronRight icon</title>
             <path d="M12 1 L26 16 L12 31 L8 27 L18 16 L8 5 z"></path>
             </svg>
         </a> {% else %}
-      <a href="#" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box">
+      <a href="#" class="bw1 f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box">
         <span class="pr1 f5">Next</span>
             <svg class="w1" data-icon="chevronRight" viewBox="0 0 32 32" style="fill:currentcolor">
                 <title>chevronRight icon</title>
