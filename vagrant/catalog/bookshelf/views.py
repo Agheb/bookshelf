@@ -76,9 +76,10 @@ class Item(db.Model):
 
 @app.route('/')
 @app.route('/collection')
-def show_collection():
-    genres = db.session.query(Genre).all()
-    books = db.session.query(Item).all()
+@app.route('/collection/<int:page>')
+def show_collection(page=1):
+    genres = Genre.query.all()
+    books = Item.query.paginate(page, 3, False)
 
     return render_template('collection.html', genres=genres,
                            books=books)
@@ -91,14 +92,14 @@ def show_landing():
 
 """ Genre """
 
-
-@app.route('/genre/<genreid>')
-def show_genre_items(genreid):
-    genres = Genre.query.all()
-    books = Genre.query.get(genreid).items.all()
-    name = Genre.query.get(genreid).name
-    return render_template('collection.html', genres=genres, books=books,
-                           genre_name=name)
+@app.route('/genre/<int:genreid>')
+@app.route('/genre/<int:genreid>/<int:page>')
+def show_genre_items(genreid, page=1):
+    all_genres = Genre.query.all()
+    curr_genre = Genre.query.get(genreid)
+    books = Genre.query.get(genreid).items.paginate(page, 3, False)
+    return render_template('genre.html', genres=all_genres, books=books,
+                           curr_genre=curr_genre)
 
 
 @app.route('/genre/new', methods=['GET', 'POST'])

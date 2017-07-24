@@ -13,7 +13,7 @@
     </ul>
   </div>
   <div class="w-75 dib cf fr-l center">
-    <h2 class="ma-2 avenir tc near-black">Books</h2>
+    <h2 class="ma-2 avenir near-black tc">{{ curr_genre.name }} ({{ curr_genre.items.all() | length }})</h2>
     {% for book in books.items %}
     <article class="dt w-100 bb b--black-10 pb2 mt2">
       <div class="dtc w4 v-mid">
@@ -22,7 +22,7 @@
           </a>
       </div>
       <div class="dtc v-mid pl4">
-        <h1 class="f4 fw6 lh-title near-black mv0">{{ book.title }}</h1>
+        <h1 class="f4 fw6 lh-title black mv0">{{ book.title }}</h1>
         <h2 class="f5 fw4 mt2 mb0 black-60">{{ book.author }}</h2>
       </div>
       {% if current_user.is_authenticated %}
@@ -35,7 +35,7 @@
     {% endfor %}
     <div class="flex items-center justify-center pa4">
       {% if books.has_prev %}
-      <a href="{{ url_for('show_collection',page=books.prev_num) }}" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4">
+      <a href="{{ url_for('show_genre_items', genreid=curr_genre.id, page=books.prev_num) }}" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4">
         <svg class="w1" data-icon="chevronLeft" viewBox="0 0 32 32" style="fill:currentcolor">
           <title>chevronLeft icon</title>
           <path d="M20 1 L24 5 L14 16 L24 27 L20 31 L6 16 z"></path>
@@ -51,7 +51,7 @@
         <span class="pl1 f5">Prev</span>
       </a>
       {% endif %} {% if books.has_next %}
-      <a href="{{ url_for('show_collection',page=books.next_num) }}" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box">
+      <a href="{{ url_for('show_genre_items',genreid=curr_genre.id, page=books.next_num) }}" class="f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box">
         <span class="pr1 f5">Next</span>
             <svg class="w1" data-icon="chevronRight" viewBox="0 0 32 32" style="fill:currentcolor">
                 <title>chevronRight icon</title>
