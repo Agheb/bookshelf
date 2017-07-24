@@ -1,3 +1,5 @@
+#!/bin/env python
+
 from bookshelf import db
 from bookshelf.views import User, Genre, Item
 

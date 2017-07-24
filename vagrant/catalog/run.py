@@ -1,3 +1,4 @@
+#!/bin/env python
 from bookshelf import app
 
 if __name__ == '__main__':
