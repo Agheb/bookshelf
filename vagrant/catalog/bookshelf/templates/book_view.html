@@ -11,7 +11,7 @@
         <h2 class="f4 mid-gray lh-title">
             {{ book.author }}
         </h2>
-        <time class="f6 tracked gray">added at {{ book.addedat }}</time>
+        <time class="f6 tracked gray">added at {{ book.added_at.date() }}</time>
         <p class="f5 lh-copy measure mt4">
             {{book.description}}
         </p>
