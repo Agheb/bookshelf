@@ -15,9 +15,9 @@
 </head>
 
 <body class="avenir">
-  <header class="pa3 ph5-ns">
-    <nav class="dt dt--fixed w-100 border-box pb3-ns bb b--black-80  bw1">
-      <div class="dtc dn-ns w-third"></div>
+  <div class="flex flex-column min-vh-100">
+     <header>
+    <nav class="dt dt--fixed w-100 border-box pb3-ns bb b--black-80  bw1 pa3 ph5-ns">
       <a class="dtc v-mid mid-gray link dim w-third w-25-ns tc tl-ns mb2 mb0-ns" href="{{url_for('show_collection')}}" title="Home">
             <img src="{{url_for('static', filename='img/logo.svg')}}" class="dib w3 h2 v-mid" alt="Site Name">
       </a>
@@ -25,22 +25,23 @@
         {% if current_user.is_authenticated %}
         <a class="v-mid link pv1 ph3 f5 fw4  underline-hover blue" href="{{url_for('add')}}">Add a book</a>
         <img class="dib w2 h2 br-100 v-mid" src="{{ current_user.avatar }}" />
-        <a class="v-mid ph3 link dim dark-gray tc tl-ns f5 dib pv1 mr0" href="#" title="User">{{current_user.name}}</a>
-        <a class="v-mid f5 f4 link dim br1 ph3 pv1 dib white bg-dark-gray" href="{{url_for('logout')}}">Logout</a> 
-        {% else %}
-        <a class="v-mid f5 fw4 link br1 ph3 pv1 mb2 dib white bg-dark-gray" href="{{ url_for('login') }}">Login</a> {% endif %}
+        <a class="v-mid ph3 link dark-gray tc tl-ns f5 dib pv1 mr0" href="#" title="User">{{current_user.name}}</a>
+        <a class="v-mid f5  link br1 ph3 pv1 dib white bg-near-black" href="{{url_for('logout')}}">Logout</a> {% else
+        %}
+        <a class="v-mid f5  link br1 ph3 pv1 dib white bg-near-black" href="{{ url_for('login') }}">Login</a> {% endif
+        %}
       </div>
     </nav>
   </header>
-  {% block content %} 
-  {% endblock %}
-<footer class="bg-white black pv2 ph4 bt bw1 avenir fw6 absolute right-0 bottom-0 left-0 ">
-  <p class="f6"><span class="dib mr4 mr5-ns">©2017 Amanuel Ghebreweldi</span>
-    <a class="link black hover-grey" href="/terms">Terms</a> /
-    <a class="link black hover-grey" href="/privacy"> Privacy </a> /
-    <a class="link black hover-grey" href="#">hi@yourcompany.com </a>
-  </p>
-</footer>
+    <div class="flex-auto">
+      {% block content %} {% endblock %}
+    </div>
+    <footer class="h3 bg-white black ph5 bt bw1 avenir fw6">
+      <p class="f6"><span class="dib mr5-ns">©2017 Amanuel Ghebreweldi</span>
+        <span class="center">Udacity Fullstack Nanodegree Project</span>
+      </p>
+    </footer>
+  </div>
 </body>
 
 </html>
