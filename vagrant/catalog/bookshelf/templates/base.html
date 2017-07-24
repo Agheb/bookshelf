@@ -26,9 +26,9 @@
         <a class="v-mid link pv1 ph3 f5 fw4  underline-hover blue" href="{{url_for('add')}}">Add a book</a>
         <img class="dib w2 h2 br-100 v-mid" src="{{ current_user.avatar }}" />
         <a class="v-mid ph3 link dark-gray tc tl-ns f5 dib pv1 mr0" href="#" title="User">{{current_user.name}}</a>
-        <a class="v-mid f5  link br1 ph3 pv1 dib white bg-near-black" href="{{url_for('logout')}}">Logout</a> {% else
+        <a class="v-mid f5  link br1 ph3 pv1 dib white bg-dark-gray" href="{{url_for('logout')}}">Logout</a> {% else
         %}
-        <a class="v-mid f5  link br1 ph3 pv1 dib white bg-near-black" href="{{ url_for('login') }}">Login</a> {% endif
+        <a class="v-mid f5  link br1 ph3 pv1 dib white bg-dark-gray" href="{{ url_for('login') }}">Login</a> {% endif
         %}
       </div>
     </nav>
