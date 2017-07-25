@@ -153,7 +153,7 @@ def edit_book(bookid):
 def delete_book(bookid):
     """ Delete book """
     # user authorization
-    if int(current_user.get_id()) == Item.query.get(bookid).owner: 
+    if int(current_user.get_id()) == Item.query.get(bookid).owner:
         book = Item.query.get(bookid)
         db.session.delete(book)
         db.session.commit()
