@@ -1,84 +1,18 @@
 #!/bin/env python
 
 
-import datetime
-
 from flask import (jsonify, redirect, render_template, request, session,
                    url_for)
-from flask_login import (UserMixin, current_user, login_required, login_user,
-                         logout_user)
+from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import desc
-
+from model import Genre, Item, User
 import forms
 from bookshelf import app, db, google, images, login_manager
-
-
-################
-#    Model     #
-################
-
-class User(db.Model, UserMixin):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250), nullable=True)
-    avatar = db.Column(db.String(200))
-    email = db.Column(db.String(250), nullable=False)
-    auth_id = db.Column(db.String(250), nullable=False, unique=True)
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-    active = db.Column(db.Boolean, default=False)
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-class Genre(db.Model):
-    __tablename__ = 'genre'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(250), nullable=False)
-    items = db.relationship('Item', backref=db.backref(
-        'genre', lazy='joined'), lazy='dynamic')
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def serialize(self):
-        """ Return object data in easily serializeable format"""
-        return {'name': self.name,
-                'id': self.id,
-                }
-
-
-class Item(db.Model):
-    __tablename__ = 'book'
-    id = db.Column(db.Integer, primary_key=True)
-    added_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-    title = db.Column(db.String(250), nullable=False)
-    author = db.Column(db.String(250), nullable=False)
-    description = db.Column(db.String(250), default=None, nullable=True)
-    img_filename = db.Column(db.String(250), default=None, nullable=True)
-    img_url = db.Column(db.String(250), default=None, nullable=True)
-
-    genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
-
-    @property
-    def serialize(self):
-        """ Return object data in easily serializeable format """
-        return {'item_id': self.id,
-                'added_at': self.added_at,
-                'title': self.title,
-                'author': self.author,
-                'description': self.description,
-                'genre': self.genre.serialize,
-                'img_filename': self.img_filename,
-                'img_url': self.img_url
-                }
-
-
-################
-################
 
 
 @app.route('/collection/JSON')

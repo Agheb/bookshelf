@@ -47,3 +47,5 @@ object is created (http://flask.pocoo.org/docs/0.12/patterns/packages/)
 
 import bookshelf.views
 import bookshelf.forms
+import bookshelf.model
+    
