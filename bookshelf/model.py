@@ -46,7 +46,7 @@ class Item(db.Model):
     description = db.Column(db.String(250), default=None, nullable=True)
     img_filename = db.Column(db.String(250), default=None, nullable=True)
     img_url = db.Column(db.String(250), default=None, nullable=True)
-
+    owner = db.Column(db.Integer, default=0, nullable=True)
     genre_id = db.Column(db.Integer, db.ForeignKey('genre.id'))
 
     @property
@@ -59,5 +59,6 @@ class Item(db.Model):
                 'description': self.description,
                 'genre': self.genre.serialize,
                 'img_filename': self.img_filename,
+                'owner': self.owner,
                 'img_url': self.img_url
                 }

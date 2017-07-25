@@ -1,6 +1,6 @@
 #!/bin/env python
 
-
+from functools import wraps
 from flask import (jsonify, redirect, render_template, request, session,
                    url_for)
 from flask_login import current_user, login_required, login_user, logout_user
@@ -8,6 +8,25 @@ from sqlalchemy import desc
 from model import Genre, Item, User
 import forms
 from bookshelf import app, db, google, images, login_manager
+
+
+def owner(bookid):
+    """helper to return owner of book in unicode"""
+
+
+def authorize_required(func):
+    """ Decorator for user authorization"""
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        owner = Item.query.get(kwargs['bookid']).owner
+        if int(current_user.get_id()) == owner:
+            return func(*args, **kwargs)
+        else:
+            owner = Item.query.get(kwargs['bookid']).owner
+            return render_template('unauthorized.html',
+                                   name=User.query.get(owner).name)
+
+    return decorated_view
 
 
 @login_manager.user_loader
@@ -83,6 +102,7 @@ def add():
                             genre_id=form.genre.data.id,
                             description=form.description.data,
                             img_url=img_url,
+                            owner=current_user.get_id(),
                             img_filename=img_filename)
             db.session.add(new_book)
             db.session.commit()
@@ -97,6 +117,7 @@ def add():
 
 @app.route('/book/<int:bookid>/edit', methods=['GET', 'POST'])
 @login_required
+@authorize_required
 def edit_book(bookid):
     """ Edit book form view """
     book = Item.query.get(bookid)
@@ -131,13 +152,17 @@ def edit_book(bookid):
 @login_required
 def delete_book(bookid):
     """ Delete book """
-    book = Item.query.get(bookid)
-    db.session.delete(book)
-    db.session.commit()
-    return jsonify({
-        'status': 'OK',
-        'response': 'Book removed from shelf',
-        'success': True})
+    # user authorization
+    if int(current_user.get_id()) == Item.query.get(bookid).owner: 
+        book = Item.query.get(bookid)
+        db.session.delete(book)
+        db.session.commit()
+        return jsonify({
+                       'status': 'OK',
+                       'response': 'Book removed from shelf',
+                       'success': True})
+    else:
+        return ('UNAUTHORIZED', 401)
 
 
 @app.route('/book/<int:bookid>')

@@ -84,8 +84,9 @@
           if (value) {
             $.ajax({ // POST request using AJAX
               statusCode: {
-                404: function () {
-                  vex.alert('oops something went wrong');
+                401: function () {
+                  vex.dialog.buttons.YES.text='OK';
+                  vex.dialog.alert('No Authorization');
                 }
               },
               url: e.target.href,
