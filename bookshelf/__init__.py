@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import config, Auth
 from flask_uploads import configure_uploads, UploadSet, IMAGES
 from flask_oauthlib.client import OAuth
+from flask_wtf.csrf import CSRFProtect
 
 """avoid to run Flask App over https"""
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -35,10 +36,13 @@ google = oauth.remote_app(
     authorize_url=Auth.AUTH_URI,
 )
 
-
+# Flask-Login
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.session_protection = "strong"
+
+# Flask-WTF CSRF Protection
+csrf = CSRFProtect(app)
 
 """
 Ignore PEP8 Violation because modules must be imported after the application

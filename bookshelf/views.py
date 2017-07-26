@@ -10,12 +10,9 @@ import forms
 from bookshelf import app, db, google, images, login_manager
 
 
-def owner(bookid):
-    """helper to return owner of book in unicode"""
-
-
 def authorize_required(func):
-    """ Decorator for user authorization"""
+    """ Decorator for user authorization
+        Only owner (creator) of book are allowed to update/delete"""
     @wraps(func)
     def decorated_view(*args, **kwargs):
         owner = Item.query.get(kwargs['bookid']).owner
@@ -76,6 +73,7 @@ def show_genre_items(genreid, page=1):
 
 
 @app.route('/genre/new', methods=['GET', 'POST'])
+@login_required
 def new_genre():
     """ Add new genre """
     if request.method == 'POST':

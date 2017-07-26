@@ -4,7 +4,7 @@
   <form enctype=multipart/form-data action="{{ url_for('add') }}" class="measure center" method="post">
     <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
       <legend class="f4 fw6 ph0 mh0">Add Book</legend>
-      {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
       <div class="mt3">
         {{ form.title.label(class_='db fw6 lh-copy f6') }} {{ form.title(class_='pa2 input-reset ba bg-transparent w-100') }}
       </div>
