@@ -1,2 +1,2 @@
 # vendored css
-bookshelf/static/css/tachyons.min.css linguist-vendored
+bookshelf/static/css/* linguist-vendored
