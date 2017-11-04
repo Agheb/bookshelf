@@ -1,2 +1,5 @@
 # vendored css
 bookshelf/static/css/* linguist-vendored
+
+# vendored html
+bookshelf/templates/* linguist-vendored
